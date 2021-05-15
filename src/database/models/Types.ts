@@ -1,6 +1,6 @@
 import { IsDate, Length } from 'class-validator'
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, BeforeInsert, BeforeRemove, BeforeUpdate, CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm'
-import { types } from 'types'
+import { types } from '../../types/index'
 
 @Entity('code_types')
 export class Types extends BaseEntity {

@@ -1,9 +1,12 @@
-import { IsDate, IsInt, Length } from 'class-validator'
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, OneToOne, BeforeUpdate, BeforeInsert, BeforeRemove, CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm'
-import { statuses } from 'types'
-import { Account } from './Account'
-import { Merchant } from './Merchant'
+import { IsDate, IsInt, Length } from 'class-validator'
 
+import { Account } from './Account'
+import { CustomerContact } from './CustomerContact'
+import { Merchant } from './Merchant'
+import { statuses } from 'types'
+
+import * as bcrypt from 'bcrypt'
 @Entity('customers')
 export class Customer extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -34,6 +37,9 @@ export class Customer extends BaseEntity {
   @OneToMany(type => Account, account => account.customer)
   accounts: Account[]
 
+  @OneToMany(type => CustomerContact, customerContact => customerContact.customer)
+  contacts: CustomerContact[]
+
   @OneToOne(type => Merchant, merchant => merchant.customer)
   merchant: Merchant
 
@@ -52,6 +58,7 @@ export class Customer extends BaseEntity {
   @BeforeInsert()
   initDates() {
     this.status = 'pending'
+    this.password = bcrypt.hashSync(this.password, 10)
   }
 
   @BeforeRemove()
